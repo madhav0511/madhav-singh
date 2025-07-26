@@ -1,2 +1,2 @@
-# madhav-singh-portfolio
+# madhav-singh
 My Interactive Resume 
