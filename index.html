@@ -51,6 +51,34 @@
             height: 400px;
             max-height: 50vh;
         }
+
+         /* --- PRINT MEDIA QUERIES (add the entire block from the previous response) --- */
+        @media print {
+            .tab-content.hidden {
+                display: block !important;
+            }
+            .tab-btn {
+                display: none !important;
+            }
+            section {
+                padding-top: 1rem !important;
+                padding-bottom: 1rem !important;
+                margin-bottom: 1rem !important;
+            }
+            #mobile-menu {
+                display: none !important;
+            }
+            header {
+                position: static !important;
+                box-shadow: none !important;
+            }
+            .timeline-header {
+                cursor: default !important;
+            }
+            .timeline-content.hidden {
+                display: block !important;
+            }
+        }
     </style>
 </head>
 <body class="text-slate-700">
