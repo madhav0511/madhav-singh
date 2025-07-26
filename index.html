@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Madhav Singh - Enterprise Security Architect</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         /* Base styles for the body and common elements */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background-color: #f8fafc; /* slate-50 */
             display: flex; /* Make body a flex container for overall layout */
             flex-direction: column; /* Stack header, main content, and footer vertically */
             min-height: 100vh; /* Ensure body takes full viewport height */
@@ -57,12 +57,12 @@
             width: 100%; /* Default to full width on small screens */
             padding: 1.5rem; /* Add some padding */
             text-align: center; /* Center content on smaller screens */
+            flex-shrink: 0; /* Prevent it from shrinking */
         }
 
         @media (min-width: 768px) { /* Medium screens (md) and up */
             .left-sidebar {
                 width: 280px; /* Fixed width for the sidebar */
-                flex-shrink: 0; /* Prevent it from shrinking */
                 position: sticky; /* Make it sticky */
                 top: 0; /* Stick to the top */
                 align-self: flex-start; /* Align to the top of the flex container */
@@ -83,91 +83,100 @@
             }
         }
 
-        /* Print media queries for optimal printing */
+        /* Print Media Queries for Optimal Printing */
         @media print {
-            /* Ensure all tab contents are visible when printing */
-            .tab-content.hidden {
-                display: block !important; /* Override Tailwind's hidden class */
+            /* Hide non-essential elements for printing */
+            header, footer, .no-print {
+                display: none !important;
             }
 
-            /* Optionally, hide the tab buttons themselves for print */
+            /* Ensure main content takes full width */
+            body {
+                display: block !important;
+            }
+            .main-content-wrapper {
+                flex-direction: column !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* Make sidebar content flow normally, center alignment */
+            .left-sidebar {
+                position: static !important;
+                height: auto !important;
+                width: 100% !important;
+                box-shadow: none !important;
+                padding: 1rem 0 !important;
+                margin-bottom: 1rem;
+                text-align: center !important;
+            }
+            .left-sidebar .flex-col {
+                align-items: center !important;
+            }
+            .left-sidebar img {
+                margin: 0 auto 0.5rem auto !important;
+            }
+            .left-sidebar h2, .left-sidebar p, .left-sidebar a {
+                text-align: center !important;
+            }
+
+            /* Show all tab contents */
+            .tab-content.hidden {
+                display: block !important;
+                margin-bottom: 1rem; /* Add space between sections when all are visible */
+            }
+            /* Hide tab buttons */
             .tab-btn {
                 display: none !important;
             }
 
-            /* Adjust section padding/margins for better print layout */
-            section {
-                padding-top: 0.5rem !important; /* Reduce top padding on sections */
-                padding-bottom: 0.5rem !important; /* Reduce bottom padding on sections */
-                margin-bottom: 0.5rem !important; /* Reduce bottom margin on sections */
-            }
-
-            /* Ensure the mobile menu is hidden when printing */
-            #mobile-menu {
-                display: none !important;
-            }
-
-            /* Ensure fixed header doesn't overlap content when printing */
-            header {
-                position: static !important;
-                box-shadow: none !important;
-                display: none !important; /* Hide header completely on print to save space */
-            }
-
-            /* Ensure the footer is hidden on print */
-            footer {
-                display: none !important;
-            }
-
-            /* Remove timeline interactivity-specific styles and display all content */
-            .timeline-header {
-                cursor: default !important;
-            }
+            /* Show all timeline content */
             .timeline-content.hidden {
                 display: block !important;
             }
-
-            /* Adjust main content wrapper for print (stack sidebar and main content) */
-            .main-content-wrapper {
-                flex-direction: column !important; /* Stack image and content vertically on print */
+            .timeline-header {
+                cursor: default !important; /* Remove pointer for print */
             }
 
-            /* Ensure left sidebar content is visible and centered for print */
-            .left-sidebar {
-                position: static !important; /* Remove sticky position */
-                height: auto !important; /* Auto height */
-                width: 100% !important; /* Take full width */
-                box-shadow: none !important; /* Remove shadow */
-                padding: 1rem 0 !important; /* Adjust padding */
-                margin-bottom: 1rem; /* Space below intro block */
-            }
-            .left-sidebar .flex-col {
-                align-items: center !important; /* Center items in sidebar for print */
-            }
-            .left-sidebar img {
-                margin: 0 auto 0.5rem auto !important; /* Center image and add space below */
-            }
-            .left-sidebar h2, .left-sidebar p, .left-sidebar a {
-                text-align: center !important; /* Center text in sidebar */
-            }
-
-            /* Adjust main content padding for print */
-            main {
+            /* Adjust general section padding/margins for print */
+            section {
                 padding-top: 0.5rem !important;
                 padding-bottom: 0.5rem !important;
+                margin-bottom: 0.75rem !important;
+                break-inside: avoid; /* Avoid breaking sections across pages */
+            }
+            h1, h2, h3 {
+                break-after: avoid; /* Keep headings with their content */
+            }
+            ul, ol, p {
+                break-inside: avoid; /* Prevent breaking lists/paragraphs */
             }
 
-            /* Ensure full content is printed without cuts */
+            /* Ensure full content is printed without cuts for backgrounds/colors */
             body {
-                -webkit-print-color-adjust: exact; /* For backgrounds and colors to print */
+                -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
+            }
+            .bg-white {
+                background-color: #fff !important; /* Ensure white background on cards */
+            }
+            .shadow-md {
+                box-shadow: none !important; /* Remove shadows for cleaner print */
+                border: 1px solid #e2e8f0; /* Add subtle border for separation */
+            }
+            
+            /* Remove specific interactive styling that doesn't make sense on print */
+            .hover\:text-cyan-600:hover, .hover\:border-slate-300:hover {
+                text-decoration: none !important;
+                color: inherit !important;
+                border-color: inherit !important;
             }
         }
     </style>
 </head>
 <body class="text-slate-700">
 
-    <header class="bg-white shadow-sm sticky top-0 z-50">
+    <header class="bg-white shadow-sm sticky top-0 z-50 no-print">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="text-2xl font-bold text-slate-800">Madhav Singh</div>
             <div class="hidden md:flex space-x-8">
@@ -195,7 +204,8 @@
     <div class="main-content-wrapper flex flex-grow flex-col md:flex-row">
 
         <aside class="left-sidebar bg-white shadow-md">
-            <div class="flex flex-col items-center mb-6 md:mb-0"> <img src="images/madhav-profile.jpg" alt="Madhav Singh Profile Picture" class="w-40 h-40 rounded-full object-cover shadow-lg border-4 border-cyan-500 mb-4">
+            <div class="flex flex-col items-center mb-6 md:mb-0">
+                <img src="images/madhav-profile.jpg" alt="Madhav Singh Profile Picture" class="w-40 h-40 rounded-full object-cover shadow-lg border-4 border-cyan-500 mb-4">
                 <h2 class="text-2xl font-bold text-slate-800 text-center md:text-left mb-2">Madhav Singh</h2>
                 <p class="text-md text-cyan-700 font-medium text-center md:text-left mb-4">Enterprise Security Architect</p>
                 
@@ -204,6 +214,10 @@
                     <p class="text-slate-600 text-center md:text-left">9393033732</p>
                     <a href="https://www.linkedin.com/in/madhavsingh0511" target="_blank" class="text-cyan-500 hover:text-cyan-600 block mt-2 text-center md:text-left">LinkedIn Profile</a>
                 </div>
+
+                <button onclick="window.print()" class="no-print mt-8 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
+                    Print / Save as PDF
+                </button>
             </div>
         </aside>
 
@@ -240,4 +254,346 @@
                                 </div>
                                 <div class="bg-white p-6 rounded-lg shadow-md">
                                     <h3 class="font-semibold text-lg mb-2 text-slate-800">Compliance</h3>
-                                    <p class="text-slate-600">GDPR, PDP
+                                    <p class="text-slate-600">GDPR, PDPB, HIPAA, PCI DSS, IRAP, FedRAMP, RBI/IRDAI</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">Strategic Planning</h3>
+                                    <p class="text-slate-600">Risk-Based Approach, Strategic Roadmaps, Program Management, Contract Negotiations</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="iam" class="tab-content hidden">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">IGA & Federation</h3>
+                                    <p class="text-slate-600">SailPoint, Saviynt, Okta, Ping Identity, OAuth2.0, OpenID Connect, SAML</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">Privileged Access Management (PAM)</h3>
+                                    <p class="text-slate-600">CyberArk, BeyondTrust, Thycotic, Wallix, Arcon</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">Cloud IAM</h3>
+                                    <p class="text-slate-600">Microsoft Entra ID, AWS IAM, GCP IAM</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">Authentication</h3>
+                                    <p class="text-slate-600">FIDO2/WebAuthn, MFA, SSO, Passwordless</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="devsecops" class="tab-content hidden">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">CI/CD & Automation</h3>
+                                    <p class="text-slate-600">CI/CD Pipeline Security, Secure Secrets Management, Infrastructure as Code (IaC) Security</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">Application Security</h3>
+                                    <p class="text-slate-600">SAST, DAST, IAST (Appscan, WebInspect, Veracode)</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">Container & Microservice Security</h3>
+                                    <p class="text-slate-600">Kubernetes Security, Service Mesh Security</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">Threat Modeling</h3>
+                                    <p class="text-slate-600">STRIDE Methodology</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="security-ops" class="tab-content hidden">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">SIEM & Monitoring</h3>
+                                    <p class="text-slate-600">IBM QRadar, Splunk ES, ELK, Zabbix, Prometheus, Solarwinds</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">Vulnerability Management</h3>
+                                    <p class="text-slate-600">Nexpose, Nessus, GFI Languard, HP Fortify, OWASP ZAP</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">Incident Response</h3>
+                                    <p class="text-slate-600">Process Development, Red & Blue Team Simulation, Threat Hunting</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">SOC Integration</h3>
+                                    <p class="text-slate-600">Centralized security operations, SOAR implementation, False positive reduction</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="experience" class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-slate-800 mb-12">Professional Experience</h2>
+                <div class="relative max-w-3xl mx-auto">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-item relative pl-8 pb-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md cursor-pointer timeline-header">
+                            <p class="text-sm text-slate-500">Dec 2021 - Present</p>
+                            <h3 class="text-xl font-semibold text-slate-800">Altiostar Networks (Rakuten Symphony)</h3>
+                            <p class="text-cyan-700 font-medium">Global Security Architecture and Operations Leader</p>
+                        </div>
+                        <div class="timeline-content hidden mt-4 pl-4 border-l-2 border-slate-200">
+                            <ul class="list-disc list-inside space-y-2 text-slate-600">
+                                <li>Developed and executed enterprise IAM strategy aligned with regulatory requirements and business goals.</li>
+                                <li>Led evaluation and deployment of IGA (SailPoint) and PAM (CyberArk, Wallix) tools.</li>
+                                <li>Directed implementation of MFA, SSO, and PAM using Okta, Ping Identity, and CyberArk.</li>
+                                <li>Led architectural design of a Zero Trust Remote Access (ZTRAS) solution.</li>
+                                <li>Enhanced RBAC features for an in-house user control module using Keycloak.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item relative pl-8 pb-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md cursor-pointer timeline-header">
+                            <p class="text-sm text-slate-500">Dec 2020 - Nov 2021</p>
+                            <h3 class="text-xl font-semibold text-slate-800">Neustar Data Services</h3>
+                            <p class="text-cyan-700 font-medium">Principal Information Security Architect</p>
+                        </div>
+                        <div class="timeline-content hidden mt-4 pl-4 border-l-2 border-slate-200">
+                            <ul class="list-disc list-inside space-y-2 text-slate-600">
+                                <li>Built Enterprise Cyber Security Framework and roadmap using NIST CSF, ISO 27001, and PCI DSS.</li>
+                                <li>Developed IDaM strategy for contextual/adaptive identity and access management.</li>
+                                <li>Designed GRC-aligned IAM solutions, ensuring role modeling and SoD enforcement.</li>
+                                <li>Built CI/CD-integrated IAM policies for DevSecOps pipelines.</li>
+                                <li>Devised Zero Trust architecture leveraging SDP and SASE.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item relative pl-8 pb-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md cursor-pointer timeline-header">
+                            <p class="text-sm text-slate-500">Feb 2020 - Nov 2020</p>
+                            <h3 class="text-xl font-semibold text-slate-800">Cloud4c Services</h3>
+                            <p class="text-cyan-700 font-medium">AVP - Information Security (Global CISO)</p>
+                        </div>
+                        <div class="timeline-content hidden mt-4 pl-4 border-l-2 border-slate-200">
+                            <ul class="list-disc list-inside space-y-2 text-slate-600">
+                                <li>Led the design and build of a Secure DevOps framework from the ground up.</li>
+                                <li>Integrated CyberArk, Thycotic, and BeyondTrust PAM tools with cloud and on-prem systems.</li>
+                                <li>Aligned IAM strategy with Zero Trust principles.</li>
+                                <li>Introduced innovative security products like Azure Sentinel for proactive monitoring.</li>
+                                <li>Delivered IGA solutions using SailPoint and Saviynt.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item relative pl-8 pb-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md cursor-pointer timeline-header">
+                            <p class="text-sm text-slate-500">Dec 2018 - Oct 2019</p>
+                            <h3 class="text-xl font-semibold text-slate-800">Deloitte India</h3>
+                            <p class="text-cyan-700 font-medium">Manager - Cyber Risk</p>
+                        </div>
+                        <div class="timeline-content hidden mt-4 pl-4 border-l-2 border-slate-200">
+                            <ul class="list-disc list-inside space-y-2 text-slate-600">
+                                <li>Led cybersecurity business development and project delivery.</li>
+                                <li>Successfully completed a GDPR project for a client with European presence.</li>
+                                <li>Redesigned SIEM architecture for a global bank, incorporating resiliency and SOAR capabilities.</li>
+                                <li>Contributed to the re-architecture of GPay to be compliant with Indian data protection regulations.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item relative pl-8 pb-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md cursor-pointer timeline-header">
+                            <p class="text-sm text-slate-500">Feb 2011 - June 2018</p>
+                            <h3 class="text-xl font-semibold text-slate-800">Honeywell India</h3>
+                            <p class="text-cyan-700 font-medium">Enterprise Architect</p>
+                        </div>
+                        <div class="timeline-content hidden mt-4 pl-4 border-l-2 border-slate-200">
+                            <ul class="list-disc list-inside space-y-2 text-slate-600">
+                                <li>Led global projects to design and implement security controls for hybrid datacenters.</li>
+                                <li>Rationalized technology asset portfolio, saving $20M.</li>
+                                <li>Integrated endpoints with Splunk ES SIEM for security monitoring.</li>
+                                <li>Developed incident response processes and enterprise security policies.</li>
+                                <li>Managed and mentored a team of architects.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item relative pl-8 pb-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md cursor-pointer timeline-header">
+                            <p class="text-sm text-slate-500">June 2006 - Feb 2011</p>
+                            <h3 class="text-xl font-semibold text-slate-800">IBM India</h3>
+                            <p class="text-cyan-700 font-medium">Server Operation Lead Specialist</p>
+                        </div>
+                        <div class="timeline-content hidden mt-4 pl-4 border-l-2 border-slate-200">
+                            <ul class="list-disc list-inside space-y-2 text-slate-600">
+                                <li>Managed end-to-end Vulnerability Management for applications, systems, and network security.</li>
+                                <li>Consolidated Vulnerability Management across clients, improving resource utilization and saving costs.</li>
+                                <li>Introduced RED & BLUE team concepts to proactively identify and remediate vulnerabilities.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="achievements" class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-slate-800 mb-8">Key Quantitative Achievements</h2>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="chart-container">
+                        <canvas id="achievementsChart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-slate-500 mt-4">This chart highlights significant, measurable impacts from various roles, demonstrating a consistent focus on efficiency and cost optimization.</p>
+                </div>
+            </section>
+
+            <section id="certifications" class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-slate-800 mb-8">Certifications & Education</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold text-slate-800 mb-4">Professional Certifications</h3>
+                        <ul class="space-y-2 text-slate-600">
+                            <li>✓ AWS Cloud Security - Certified</li>
+                            <li>✓ AZ-500: Azure Security Technologies - Certified</li>
+                            <li>✓ Google Cloud Certified Professional Security Engineer - Certified</li>
+                            <li>✓ TOGAF 9.1 Certified</li>
+                            <li>✓ AWS Architect - Professional - Certified</li>
+                            <li>✓ ITIL V3 Foundation Certified</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold text-slate-800 mb-4">Education</h3>
+                        <div class="space-y-2 text-slate-600">
+                            <p><span class="font-semibold">Master of Science in Computer Science</span><br>New Port University, 2007</p>
+                            <p><span class="font-semibold">Bachelor of Arts</span><br>Osmania University, 1996</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div> <footer class="bg-slate-800 text-white mt-auto no-print">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <h3 class="text-2xl font-bold mb-2">Contact Me</h3>
+            <p class="mb-4">Madhav7@yahoo.com | 9393033732</p>
+            <a href="https://www.linkedin.com/in/madhavsingh0511" target="_blank" class="text-cyan-400 hover:text-cyan-300">LinkedIn Profile</a>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Tab functionality for Core Competencies
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Deactivate all tabs
+                tabs.forEach(item => {
+                    item.classList.remove('active', 'text-cyan-600', 'border-cyan-600');
+                    item.classList.add('text-slate-500', 'hover:text-slate-700', 'hover:border-slate-300');
+                });
+                // Activate clicked tab
+                tab.classList.add('active', 'text-cyan-600', 'border-cyan-600');
+                tab.classList.remove('text-slate-500', 'hover:text-slate-700', 'hover:border-slate-300');
+                
+                // Show/hide tab content
+                const target = tab.getAttribute('data-target');
+                contents.forEach(content => {
+                    if (content.id === target) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        // Timeline header click to expand/collapse content
+        const timelineHeaders = document.querySelectorAll('.timeline-header');
+        timelineHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling; // Get the next sibling (timeline-content)
+                content.classList.toggle('hidden');
+            });
+        });
+        
+        // Chart.js initialization for Achievements
+        const ctx = document.getElementById('achievementsChart').getContext('2d');
+        const achievementsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Downtime Reduction % (Virtualization)', 'Storage Optimization %', 'Downtime Reduction % (Active Directory)', 'Technology Portfolio Savings ($M)'],
+                datasets: [{
+                    label: 'Impact Metric',
+                    data: [90, 80, 90, 20],
+                    backgroundColor: [
+                        'rgba(22, 78, 99, 0.7)',  // Dark Cyan
+                        'rgba(8, 145, 178, 0.7)', // Default Cyan
+                        'rgba(103, 232, 249, 0.7)',// Light Cyan
+                        'rgba(165, 243, 252, 0.7)' // Pale Cyan
+                    ],
+                    borderColor: [
+                        'rgba(22, 78, 99, 1)',
+                        'rgba(8, 145, 178, 1)',
+                        'rgba(103, 232, 249, 1)',
+                        'rgba(165, 243, 252, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false // Hide the legend for a cleaner look
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    if (context.label.includes('%')) {
+                                        label += context.parsed.y + '%';
+                                    } else {
+                                        label += '$' + context.parsed.y + 'M';
+                                    }
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value, index, values) {
+                                // Add '%' or '$M' to y-axis labels based on the data point
+                                const label = this.getLabelForValue(value);
+                                if (value === 20) { // Specific value for $M
+                                     return value + '$M';
+                                } else if (value === 90 || value === 80) { // Specific values for percentage
+                                    return value + '%';
+                                }
+                                return value; // Fallback for others
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                           callback: function(value, index, values) {
+                                // Truncate long labels for better readability on x-axis
+                                const label = this.getLabelForValue(value);
+                                if (label.length > 20 && window.innerWidth < 768) { // Only truncate on smaller screens
+                                    // Split by space, take first word, then abbreviate others if needed
+                                    return label.split(' ').map((word, i) => i === 0 ? word : (word.length > 8 ? word.substring(0, 8) + '...' : word)).join(' ');
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
