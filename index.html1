@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madhav Singh - Enterprise Security Architect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base styles for the body and common elements */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            display: flex; /* Make body a flex container for overall layout */
+            flex-direction: column; /* Stack header, main content, and footer vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            color: #475569; /* Default text color (slate-600) */
+        }
+
+        /* Timeline specific styles */
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: -29px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: #0891b2; /* Cyan-600 */
+            border: 3px solid #f0f9ff; /* Blue-50 */
+            z-index: 10;
+        }
+        .timeline-line {
+            position: absolute;
+            top: 12px;
+            left: -21px;
+            width: 2px;
+            height: 100%;
+            background-color: #cbd5e1; /* Slate-300 */
+        }
+        
+        /* Chart container styles */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh; /* Ensures it doesn't get too tall on smaller screens */
+        }
+
+        /* Left Sidebar specific styles */
+        .left-sidebar {
+            width: 100%; /* Default to full width on small screens */
+            padding: 1.5rem; /* Add some padding */
+            text-align: center; /* Center content on smaller screens */
+        }
+
+        @media (min-width: 768px) { /* Medium screens (md) and up */
+            .left-sidebar {
+                width: 280px; /* Fixed width for the sidebar */
+                flex-shrink: 0; /* Prevent it from shrinking */
+                position: sticky; /* Make it sticky */
+                top: 0; /* Stick to the top */
+                align-self: flex-start; /* Align to the top of the flex container */
+                height: 100vh; /* Make it take full viewport height */
+                overflow-y: auto; /* Allow scrolling if content overflows */
+                text-align: left; /* Align text left within sidebar on larger screens */
+                padding-top: 2rem; /* Adjust padding for sticky effect */
+                padding-bottom: 2rem;
+            }
+            .left-sidebar img {
+                margin-left: auto; /* Center image within sidebar on larger screens */
+                margin-right: auto;
+            }
+        }
+        @media (min-width: 1024px) { /* Large screens (lg) and up */
+            .left-sidebar {
+                width: 320px; /* Slightly wider sidebar on large screens */
+            }
+        }
+
+        /* Print media queries for optimal printing */
+        @media print {
+            /* Ensure all tab contents are visible when printing */
+            .tab-content.hidden {
+                display: block !important; /* Override Tailwind's hidden class */
+            }
+
+            /* Optionally, hide the tab buttons themselves for print */
+            .tab-btn {
+                display: none !important;
+            }
+
+            /* Adjust section padding/margins for better print layout */
+            section {
+                padding-top: 0.5rem !important; /* Reduce top padding on sections */
+                padding-bottom: 0.5rem !important; /* Reduce bottom padding on sections */
+                margin-bottom: 0.5rem !important; /* Reduce bottom margin on sections */
+            }
+
+            /* Ensure the mobile menu is hidden when printing */
+            #mobile-menu {
+                display: none !important;
+            }
+
+            /* Ensure fixed header doesn't overlap content when printing */
+            header {
+                position: static !important;
+                box-shadow: none !important;
+                display: none !important; /* Hide header completely on print to save space */
+            }
+
+            /* Ensure the footer is hidden on print */
+            footer {
+                display: none !important;
+            }
+
+            /* Remove timeline interactivity-specific styles and display all content */
+            .timeline-header {
+                cursor: default !important;
+            }
+            .timeline-content.hidden {
+                display: block !important;
+            }
+
+            /* Adjust main content wrapper for print (stack sidebar and main content) */
+            .main-content-wrapper {
+                flex-direction: column !important; /* Stack image and content vertically on print */
+            }
+
+            /* Ensure left sidebar content is visible and centered for print */
+            .left-sidebar {
+                position: static !important; /* Remove sticky position */
+                height: auto !important; /* Auto height */
+                width: 100% !important; /* Take full width */
+                box-shadow: none !important; /* Remove shadow */
+                padding: 1rem 0 !important; /* Adjust padding */
+                margin-bottom: 1rem; /* Space below intro block */
+            }
+            .left-sidebar .flex-col {
+                align-items: center !important; /* Center items in sidebar for print */
+            }
+            .left-sidebar img {
+                margin: 0 auto 0.5rem auto !important; /* Center image and add space below */
+            }
+            .left-sidebar h2, .left-sidebar p, .left-sidebar a {
+                text-align: center !important; /* Center text in sidebar */
+            }
+
+            /* Adjust main content padding for print */
+            main {
+                padding-top: 0.5rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+
+            /* Ensure full content is printed without cuts */
+            body {
+                -webkit-print-color-adjust: exact; /* For backgrounds and colors to print */
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-slate-800">Madhav Singh</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="text-slate-600 hover:text-cyan-600 transition duration-300">About</a>
+                <a href="#skills" class="text-slate-600 hover:text-cyan-600 transition duration-300">Skills</a>
+                <a href="#experience" class="text-slate-600 hover:text-cyan-600 transition duration-300">Experience</a>
+                <a href="#achievements" class="text-slate-600 hover:text-cyan-600 transition duration-300">Achievements</a>
+                <a href="#certifications" class="text-slate-600 hover:text-cyan-600 transition duration-300">Certifications</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-slate-800 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden px-6 pb-4">
+            <a href="#about" class="block py-2 text-slate-600 hover:text-cyan-600">About</a>
+            <a href="#skills" class="block py-2 text-slate-600 hover:text-cyan-600">Skills</a>
+            <a href="#experience" class="block py-2 text-slate-600 hover:text-cyan-600">Experience</a>
+            <a href="#achievements" class="block py-2 text-slate-600 hover:text-cyan-600">Achievements</a>
+            <a href="#certifications" class="block py-2 text-slate-600 hover:text-cyan-600">Certifications</a>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper flex flex-grow flex-col md:flex-row">
+
+        <aside class="left-sidebar bg-white shadow-md">
+            <div class="flex flex-col items-center mb-6 md:mb-0"> <img src="images/madhav-profile.jpg" alt="Madhav Singh Profile Picture" class="w-40 h-40 rounded-full object-cover shadow-lg border-4 border-cyan-500 mb-4">
+                <h2 class="text-2xl font-bold text-slate-800 text-center md:text-left mb-2">Madhav Singh</h2>
+                <p class="text-md text-cyan-700 font-medium text-center md:text-left mb-4">Enterprise Security Architect</p>
+                
+                <div class="mt-4 w-full px-4 md:px-0">
+                    <p class="text-slate-600 text-center md:text-left">Madhav7@yahoo.com</p>
+                    <p class="text-slate-600 text-center md:text-left">9393033732</p>
+                    <a href="https://www.linkedin.com/in/madhavsingh0511" target="_blank" class="text-cyan-500 hover:text-cyan-600 block mt-2 text-center md:text-left">LinkedIn Profile</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-grow container mx-auto px-6 py-12">
+            
+            <section id="about" class="mb-16">
+                <h1 class="text-4xl md:text-5xl font-bold text-slate-800 text-center mb-4">About Me</h1>
+                <p class="max-w-4xl mx-auto text-lg text-slate-600 leading-relaxed text-center">
+                    TOGAF certified Enterprise Security Architect with over 22 years of experience in Cyber Security Architecture, solution design, and security operations. A seasoned IAM Architect specializing in designing and implementing enterprise-grade solutions across hybrid and multi-cloud environments. Expert in modern authentication protocols, Zero Trust frameworks, and GRC-aligned IAM programs. Proven ability to align identity security with business risk, compliance, and DevSecOps processes.
+                </p>
+            </section>
+
+            <section id="skills" class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-slate-800 mb-8">Core Competencies & Technical Skills</h2>
+                <div class="max-w-5xl mx-auto">
+                    <div class="mb-4 border-b border-slate-200">
+                        <nav class="flex flex-wrap -mb-px" aria-label="Tabs">
+                            <button class="tab-btn active text-cyan-600 border-cyan-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm sm:px-4" data-target="architecture">Architecture & Strategy</button>
+                            <button class="tab-btn text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm sm:px-4" data-target="iam">IAM & PAM</button>
+                            <button class="tab-btn text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm sm:px-4" data-target="devsecops">DevSecOps</button>
+                            <button class="tab-btn text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm sm:px-4" data-target="security-ops">Security Operations</button>
+                        </nav>
+                    </div>
+                    <div>
+                        <div id="architecture" class="tab-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">Frameworks & Standards</h3>
+                                    <p class="text-slate-600">TOGAF, SABSA, NIST CSF, ISO 27001/2, CIS, CSA STAR</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">Network Security</h3>
+                                    <p class="text-slate-600">NGFW (Palo Alto, Checkpoint), WAF (F5, Radware), DDoS (Arbor), IDS/IPS (McAfee, Cisco), SSL VPN</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <h3 class="font-semibold text-lg mb-2 text-slate-800">Compliance</h3>
+                                    <p class="text-slate-600">GDPR, PDP
