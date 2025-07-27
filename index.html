@@ -9,6 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+
+         /* ... existing base styles and other custom styles ... */
+
+        /* Add this specific rule for sticky header offset */
+        section[id] {
+            scroll-margin-top: 5rem; /* Adjust this value (e.g., 4rem, 6rem) to be slightly more than your header's height */
+        }
+
+        /* ... existing print media queries or other styles ... */
         /* Base styles for the body and common elements */
         body {
             font-family: 'Inter', sans-serif;
